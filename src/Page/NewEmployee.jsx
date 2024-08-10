@@ -2,22 +2,58 @@ import '../Style/main.css';
 import Header from '../Component/Header';
 import InputFormEmployee from "../Component/FormInput"
 import Button from '../Component/button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { states } from "../data/states";
+import { department } from "../data/department";
+import store from '../Redux/store'
+import 'react-datepicker/dist/react-datepicker.css'
+
+//Reste à faire : 
+    //Affichage d'un nombre X d'employé
+    //Affichage de plusieurs pages
+    //*********************Recherche d'utilisateur
+    //*********************Classement dans ordre croissant par section 
+    //Modale via bibliothèque externe
+    //Modifier le datepicker
+
 
 export default function HRnet() {
-const [firstName, setFirstName]=useState('')
-const [lastName, setLastName]=useState("")
-const [birthdate, setBirthDate]=useState("")
-const [department, setDepartment]=useState("")
-const [street, setStreet]=useState("")
-const [city, setCity]=useState("")
-const [zipCode, setZipCode] = useState("")
 
-  //Récupérer toutes les infos
-  
+
+  const [startDateSelected , setStartDateSelect] = useState()
+  const [birthDateSelected, setBirthDaySelected]= useState()
 
   const handleSaveEmployee = ()=>{
-    console.log("Employee save");
+    const firstName = document.getElementById('first-name').value;
+    const lastName = document.getElementById('last-name').value;
+    const birthDate = document.getElementById("date-of-birth").value
+    const startDate = document.getElementById('start-date').value;
+    const department = document.getElementById('department').value;
+    const street = document.getElementById('street').value;
+    const city = document.getElementById('city').value;
+    const state = document.getElementById('state').value;
+    const zipCode = document.getElementById('zip-code').value;
+
+    const employee = {
+      firstName,
+      lastName,
+      birthDate,
+      startDate,
+      department,
+      street,
+      city,
+      state,
+      zipCode
+  };
+  if(firstName && lastName && birthDate && startDate && department && street && city && state && state && zipCode){
+    const employees = JSON.parse(localStorage.getItem('employees')) || []
+    employees.push(employee);
+    console.log(employees);
+    localStorage.setItem('employees', JSON.stringify(employees));
+  }
+  else{
+    console.log("Manque");
+  }
   }
 
   return (
@@ -32,8 +68,8 @@ const [zipCode, setZipCode] = useState("")
                     <InputFormEmployee label="last-name" content="Last Name" type="text"   />
                 </div>
                 <div className="formFlex">
-                    <InputFormEmployee label="last-name" content="Date of Birth" type="text"   />
-                    <InputFormEmployee label="last-name" content="Start Date" type="text"   />
+                    <InputFormEmployee  label="date-of-birth" content="Date of Birth" type="date" date={setBirthDaySelected} value={birthDateSelected} />
+                    <InputFormEmployee label="start-date" content="Start Date" type="date" date={setStartDateSelect} value={startDateSelected}  />
                 </div>
                 <fieldset className="adress">
                     <legend>Address</legend>
@@ -41,10 +77,10 @@ const [zipCode, setZipCode] = useState("")
                         <InputFormEmployee label="street" content="Street" type="text" />
                         <InputFormEmployee label="city" content="City" type="city" />
                     </div>
-                    <InputFormEmployee label="state" content="State" type="name" />
+                    <InputFormEmployee label="state" content="State" type="select" data={states} />
                     <InputFormEmployee label="zip-code" content="Zip Code" type="number" />
                 </fieldset>
-                <InputFormEmployee label="departement"type="select"  />
+                <InputFormEmployee label="department" content="Department" type="select" data={department} />
 
             </form>
         </section>

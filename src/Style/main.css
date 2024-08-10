@@ -157,6 +157,13 @@ align-items: center;
   width: 100%;
   padding: 0 40px;
 
+  font-size: 22px;
+  font-weight: bold;
+}
+.emptyData{
+  padding:  40px 0;
+  display: flex;
+  justify-content: center;
 }
 .employeeLine{
   background-color: #5b700c;
@@ -165,4 +172,12 @@ align-items: center;
 }
 .employeeLine p{
   padding-left: 5px;
+}
+
+.tabMain{
+  cursor: pointer;
+}
+.totalEntries{
+  margin-right: auto;
+  margin-left: 100px;
 }

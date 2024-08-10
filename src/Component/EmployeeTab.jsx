@@ -1,15 +1,21 @@
-export default function employeeTab(){
+import { useState } from "react";
+
+export default function EmployeeTab({employees}){
     return(
+        <div>
             <div className="employeeLine tab">
-                <p>Jean</p>
-                <p>Jean</p>
-                <p>12/05/2015</p>
-                <p>8/06/1990</p>
-                <p>91560</p>
-                <p>Rue fin de la guerre</p>
-                <p>Yerres</p>
-                <p>Essonne</p>
-                <p>3630</p>
+                <p>{employees.firstName}</p>
+                <p>{employees.lastName}</p>
+                <p>{employees.birthDate}</p>
+                <p>{employees.startDate}</p>
+                <p>{employees.department}</p>
+                <p>{employees.street}</p>
+                <p>{employees.city}</p>
+                <p>{employees.state}</p>
+                <p>{employees.zipCode}</p>
             </div>
+            
+        </div>
+            
     )
 } 

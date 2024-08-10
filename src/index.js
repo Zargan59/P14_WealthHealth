@@ -3,20 +3,22 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
-
+import {Provider} from "react-redux"
+import store from "./Redux/store"
 import HRnet from './Page/NewEmployee';
 import EmployeeList from './Page/EmployeeList'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={< HRnet/>} />
-        <Route path="/employee-list" element={<EmployeeList/>} />
-
-      </Routes>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={< HRnet/>} />
+          <Route path="/employee-list" element={<EmployeeList/>} />
+        </Routes>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );
 
