@@ -1,12 +1,12 @@
 import { useState } from "react"
 
 
-export default function ShowEntries(){
-    const [entries, setEntries] = useState("10")
+export default function ShowEntries({entries, setEntries}){
 
     const handleChangeEntries = (e) =>{
         //Affiche le nombre d'entrée maximum à afficher
-        setEntries(e.target.selectedOptions[0].value) 
+        const value = Number(e.target.selectedOptions[0].value)
+        setEntries(value) 
     }
     return(
         <div className="entriesContent">

@@ -69,7 +69,7 @@ main{
   background-color:#758f0f;
   margin: 0;
   color: white;
-  height: 80vh;
+  min-height: 80vh;
 
   display: flex;
   flex-direction: column;
@@ -173,11 +173,97 @@ align-items: center;
 .employeeLine p{
   padding-left: 5px;
 }
+.chevron{
+  cursor: pointer;
+}
 
 .tabMain{
   cursor: pointer;
 }
 .totalEntries{
   margin-right: auto;
-  margin-left: 100px;
+}
+
+footer{
+  display: flex;
+  width: 90%;
+}
+
+footer .changePage{
+  display: flex;
+  gap: 10px;
+  width: 200px;
+  justify-content: center;
+  align-items: center;
+}
+
+.customHeaderDatePicker{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  height: 100%;
+  margin-top: 0;
+  padding: 15px;
+  background-color: #5b700c;
+
+}
+.customHeaderDatePicker .monthC{
+}
+.customHeaderDatePicker h2{
+  color: white;
+  font-size: 18px;
+  padding: 0 20px;
+  width: 160px;
+}
+.navigateDateButton{
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 24px ;
+  cursor: pointer;
+}
+.calendarContent{
+  display: flex;
+  align-items: center;
+  /* position: fixed; */
+}
+
+/* .react-datepicker__header{
+  padding: 0;
+  border: none;
+} */
+
+.test{
+  border: 2px solid red;
+}
+
+.pageButton{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border: none;
+  width: 40px;
+  height:40px;
+  background-color: transparent;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.currentPage{
+  background-color: #5b700c;
+}
+
+.alphabetique{
+  border: 2px solid red;
+}
+.anti-alphabetique{
+  border: 2px solid blue;
+}
+
+.disable{
+  display: none;
 }

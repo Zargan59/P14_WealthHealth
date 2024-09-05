@@ -5,30 +5,29 @@ import Button from '../Component/button';
 import { useEffect, useState } from 'react';
 import { states } from "../data/states";
 import { department } from "../data/department";
-import store from '../Redux/store'
+import { createEmployee } from '../Redux/reducer';
+import { useDispatch } from 'react-redux';
 import 'react-datepicker/dist/react-datepicker.css'
-
+import store from '../Redux/store';
 //Reste à faire : 
-    //Affichage d'un nombre X d'employé
     //Affichage de plusieurs pages
-    //*********************Recherche d'utilisateur
-    //*********************Classement dans ordre croissant par section 
+    //Classement dans ordre croissant par section 
     //Modale via bibliothèque externe
-    //Modifier le datepicker
 
 
 export default function HRnet() {
 
-
+  const dispatch =useDispatch()
   const [startDateSelected , setStartDateSelect] = useState()
   const [birthDateSelected, setBirthDaySelected]= useState()
 
   const handleSaveEmployee = ()=>{
+    const e = document.getElementById('department')
     const firstName = document.getElementById('first-name').value;
     const lastName = document.getElementById('last-name').value;
     const birthDate = document.getElementById("date-of-birth").value
     const startDate = document.getElementById('start-date').value;
-    const department = document.getElementById('department').value;
+    const department =e.options[e.selectedIndex].text;
     const street = document.getElementById('street').value;
     const city = document.getElementById('city').value;
     const state = document.getElementById('state').value;
@@ -45,11 +44,9 @@ export default function HRnet() {
       state,
       zipCode
   };
-  if(firstName && lastName && birthDate && startDate && department && street && city && state && state && zipCode){
-    const employees = JSON.parse(localStorage.getItem('employees')) || []
-    employees.push(employee);
-    console.log(employees);
-    localStorage.setItem('employees', JSON.stringify(employees));
+  // && lastName && birthDate && startDate && department && street && city && state && state && zipCode
+  if(firstName ){
+    dispatch(createEmployee(employee))
   }
   else{
     console.log("Manque");

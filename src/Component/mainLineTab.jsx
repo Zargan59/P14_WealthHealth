@@ -1,23 +1,24 @@
 import { useState } from "react";
 
-export default function MainLineTab({content}){
-    const [sort, setSort]= useState(true)
-    const handleSort = (e)=>{
-        setSort(!sort)
-        const test = e.target.innerHTML
-        //Rajouter une condition si =undefined
-        console.log(e.target.innerHTML)
-        if(sort){
-            console.log("Tri par ordre décroissant");
-        }
-            
-        else{
-        console.log("Tri par ordre croissant");
-    }
+export default function MainLineTab({content, id ,handleSort, currentIDSort, sort }){
+
+
+if(id == currentIDSort){
+    return(
+        <div onClick={handleSort} className="tabMain" >
+            <div className={sort? "alphabetique" : "anti-alphabetique" } >
+            <p id={id}>{content}  </p>
+            </div>
+        </div>
+    )
 }
-return(
-    <div onClick={handleSort} className="tabMain" >
-        <p>{content}</p>
-    </div>
-)
+
+
+else{
+    return(
+        <div onClick={handleSort} className="tabMain" >
+            <p id={id}>{content}  </p>
+        </div>
+    )
+}
 }
