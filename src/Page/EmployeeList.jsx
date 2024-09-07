@@ -47,38 +47,45 @@ export default function EmployeeList(){
         }
 
     },[employeeslist])
-
-    //le système de tri fonctionne mais je dois utiliser un nouveau tableau, 
-    // useEffect(()=>{
-    //     if(sort){
-    //         console.log("Alpha");
-    //         setSortedEmployee([...Employee].toSorted((a,b)=>{
-    //             if (typeof a[currentIDSort] === "string") {
-    //                 return a[currentIDSort].localeCompare(b[currentIDSort])
-    //               }
-    //               else{
-    //                 return a[currentIDSort]-(b[currentIDSort])
-    //               }
-    //             }))
-    //     }
-    //     else{
-    //         console.log("Anti-Alpha");
-    //     }
-    // },[sort])
     
     useEffect(()=>{
-        //Définis la première entité de chaque page
-        let defineFirstEmployeeOfPage = (currentPage - 1 ) * entries
-        setEmployeeList(Employee.slice(defineFirstEmployeeOfPage, defineFirstEmployeeOfPage+entries))
-    },[isSearching,entries, currentPage])
+        //Si la recherche est vide, je fais le tri parmis tous les employés
+        if(!isSearching){
+            let defineFirstEmployeeOfPage = (currentPage - 1 ) * entries
+                if(sort){
+                    const employeeSorted = [...Employee].toSorted((a,b)=>{
+                        if (typeof a[currentIDSort] === "string") {
+                            return a[currentIDSort].localeCompare(b[currentIDSort])
+                          }
+                          else{
+                            console.log("Bah");
+                            return a[currentIDSort]-(b[currentIDSort])
+                          }
+                        })
+                    setEmployeeList(employeeSorted.slice(defineFirstEmployeeOfPage, defineFirstEmployeeOfPage+entries))
+                }
+                else{
+                    const employeeSorted = [...Employee].sort((a, b) => {
+                        if (typeof a[currentIDSort] === "string") {
+                          return b[currentIDSort].localeCompare(a[currentIDSort]);
+                        } 
+                        else {
+                          return b[currentIDSort] - a[currentIDSort];
+                        }
+                    })
+                    console.log(employeeSorted);
+                    setEmployeeList(employeeSorted.slice(defineFirstEmployeeOfPage, defineFirstEmployeeOfPage+entries))
 
-    const handleNextPage = ()=>{
-        setCurrentPage(Number(currentPage)+1)
-    }
-    const handlePreviousPage = ()=>{
-        setCurrentPage(Number(currentPage)-1)
+                }
+        
+       
+        }
+        //Sinon je recherche uniquement parmi les employés recherché
+    },[isSearching,entries, currentPage, sort])
 
-    }
+  //D'abord, tu tries les employées
+  //Ensuite, tu les filtres par rapport aux nombre maximum d'entrées
+  //Enfin tu les affiches
 
     const handleClickSort = (e)=>{
         const sortColumn = e.target.id
@@ -95,6 +102,7 @@ export default function EmployeeList(){
 
     
      const displayEntries = () =>{
+
         let tabOfEmployee = []
         //A remplacer par le tableau trier
 
@@ -116,9 +124,6 @@ export default function EmployeeList(){
         setIsSearching(search)
         let tab =[]
         let tabTest= new Set()
-
-
-        //A remplacer par le tableau trier
 
         Employee.filter((employee)=>{
             const test = Object.values(employee)
@@ -145,6 +150,13 @@ export default function EmployeeList(){
         setCurrentPage(e.target.value)
     }
 
+    const handleNextPage = ()=>{
+        setCurrentPage(Number(currentPage)+1)
+    }
+    const handlePreviousPage = ()=>{
+        setCurrentPage(Number(currentPage)-1)
+
+    }
 
     const definePageNumber = () =>{
         let numberPages = []
