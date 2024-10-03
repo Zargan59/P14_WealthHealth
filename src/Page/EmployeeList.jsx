@@ -11,9 +11,10 @@ import NumberPage from "../Component/numberPage"
 
 export default function EmployeeList(){
     const Employee = useSelector((state)=> state.employee.employees)
-    // const  [sortedEmployee, setSortedEmployee] = useState(...Employee)
+    const [employeeFiltered, setEmployeeFiltered] = useState()
 
-   
+    const [disableNextPage, setDisableNextPage]=useState(true)
+    const [disablePreviousPage, setDisablePreviousPage]=useState(true)
 
     const [entries, setEntries] = useState(10)
     const [error, setError] = useState(true)
@@ -29,63 +30,39 @@ export default function EmployeeList(){
     const [currentPage, setCurrentPage] = useState("1")
     const [page, setPage] = useState([])
 
+    //Le nombre de page à définir en fonction du contenu
+
     useEffect(()=>{
-        definePageNumber()
-        if(Employee.length> 0 ){
+        setTotalEntries(Employee.length)
+
+        if(Employee.length){
             setError(false)
-            setTotalEntries(Employee.length)
+            sortEmployee(Employee)
         }
         else{
             setError(true)
-            setPage([])
         }
-    }, [])
+    },[sort,entries,currentPage ])
 
+    //Quand j'affiche quelque chose de différent, je fais le trie
     useEffect(()=>{
-        if(employeeslist){
-            displayEntries()
+        if(currentPage > 1){
+            setDisablePreviousPage(false)
         }
+        else{
+            setDisablePreviousPage(true)
+            
+        }
+    },[currentPage])
 
-    },[employeeslist])
-    
+
+    //Quand je fais une recherche
     useEffect(()=>{
-        //Si la recherche est vide, je fais le tri parmis tous les employés
-        if(!isSearching){
-            let defineFirstEmployeeOfPage = (currentPage - 1 ) * entries
-                if(sort){
-                    const employeeSorted = [...Employee].toSorted((a,b)=>{
-                        if (typeof a[currentIDSort] === "string") {
-                            return a[currentIDSort].localeCompare(b[currentIDSort])
-                          }
-                          else{
-                            console.log("Bah");
-                            return a[currentIDSort]-(b[currentIDSort])
-                          }
-                        })
-                    setEmployeeList(employeeSorted.slice(defineFirstEmployeeOfPage, defineFirstEmployeeOfPage+entries))
-                }
-                else{
-                    const employeeSorted = [...Employee].sort((a, b) => {
-                        if (typeof a[currentIDSort] === "string") {
-                          return b[currentIDSort].localeCompare(a[currentIDSort]);
-                        } 
-                        else {
-                          return b[currentIDSort] - a[currentIDSort];
-                        }
-                    })
-                    console.log(employeeSorted);
-                    setEmployeeList(employeeSorted.slice(defineFirstEmployeeOfPage, defineFirstEmployeeOfPage+entries))
-
-                }
-        
-       
+        if(employeeFiltered){
+            sortEmployee(employeeFiltered)
         }
-        //Sinon je recherche uniquement parmi les employés recherché
-    },[isSearching,entries, currentPage, sort])
+    },[employeeFiltered,sort,entries,currentPage])
 
-  //D'abord, tu tries les employées
-  //Ensuite, tu les filtres par rapport aux nombre maximum d'entrées
-  //Enfin tu les affiches
 
     const handleClickSort = (e)=>{
         const sortColumn = e.target.id
@@ -98,25 +75,6 @@ export default function EmployeeList(){
                 setSort(true)
             }
         }
-    }
-
-    
-     const displayEntries = () =>{
-
-        let tabOfEmployee = []
-        //A remplacer par le tableau trier
-
-        if(Employee.length>entries){
-            for(let i= 0; i< entries; i++){
-                tabOfEmployee.push(Employee[i])
-            }
-            setDisplayEmployees(employeeslist)
-        }
-        else{
-            setDisplayEmployees(employeeslist)
-        }
-
-        
     }
 
     const handleSearchChange = (e)=> {
@@ -140,16 +98,44 @@ export default function EmployeeList(){
                 })
             });
         })
-        //Push les personnes présente dans mon 
-        setEmployeeList(Array.from(tabTest))
-        // displayEntries(Array.from(tabTest))
+        setEmployeeFiltered(Array.from(tabTest))
     }
 
+
+    const sortEmployee = (tab) =>{
+        definePageNumber(tab)
+        //Fonction qui reconnait le premier employée de chaque page une fois le tableau trier. 
+        //Me renvoie à la fin ce que je dois afficher
+        let defineFirstEmployeeOfPage = (currentPage - 1 ) * entries
+        if(sort){
+            const employeeSorted = [...tab].toSorted((a,b)=>{
+                if (typeof a[currentIDSort] === "string") {
+                    return a[currentIDSort].localeCompare(b[currentIDSort])
+                  }
+                  else{
+                    return a[currentIDSort]-(b[currentIDSort])
+                  }
+                })
+                setDisplayEmployees(employeeSorted.slice(defineFirstEmployeeOfPage, defineFirstEmployeeOfPage+entries))
+        }
+        else{
+
+            const employeeSorted = [...tab].sort((a, b) => {
+                if (typeof a[currentIDSort] === "string") {
+                  return b[currentIDSort].localeCompare(a[currentIDSort]);
+                } 
+                else {
+                  return b[currentIDSort] - a[currentIDSort];
+                }
+            })
+            setDisplayEmployees(employeeSorted.slice(defineFirstEmployeeOfPage, defineFirstEmployeeOfPage+entries))
+
+        }
+    }
 
     const handleChangePage=(e)=>{
         setCurrentPage(e.target.value)
     }
-
     const handleNextPage = ()=>{
         setCurrentPage(Number(currentPage)+1)
     }
@@ -158,18 +144,41 @@ export default function EmployeeList(){
 
     }
 
-    const definePageNumber = () =>{
+    const definePageNumber = (tab) =>{
         let numberPages = []
-        const pages = Employee.length % entries 
-        for(let i=0; i<pages+1; i++){
-            numberPages.push(i)
+        const pages = Math.ceil(tab.length/entries) 
+        console.log(tab);
+        if(pages > 1 ){
+            if(Number(currentPage)+2 > pages){
+                for(let i=Number(currentPage)-2; i< pages; i++){
+                    numberPages.push(i)
+                }
+            }
+            else{
+                for(let i=Number(currentPage)-1; i<Number(currentPage)+2; i++){
+                    numberPages.push(i)
+                }
+            }
+            setPage(numberPages)
+            setDisableNextPage(false)
         }
-        setPage(numberPages)
-        if(Employee.length % entries!== 0){
+        else{
+            setPage([0])
+            setDisablePreviousPage(false)
+
         }
-        //quand j'ai 44 entrées, j'obtiens un modulo de 4, j'ai donc 4 page en réserve
+        if(currentPage==pages){
+            setDisableNextPage(true)
+        }
+        else{
+            setDisableNextPage(false)
+        }
     }
      
+
+
+
+
     return(
         <div>
             <Header/>
@@ -209,13 +218,25 @@ export default function EmployeeList(){
                         <p>Showing 1 to {displayEmployees.length}  of {totalEntries} entries </p>
                     </div>
                     <div className="changePage">
+
+                    {
+                            disablePreviousPage? 
+                            <Chevron icon={faChevronLeft}  handleclick={handlePreviousPage} disable />
+                            : 
+                            <Chevron icon={faChevronLeft}  handleclick={handlePreviousPage}  />
+                        }
                         
-                        <Chevron icon={faChevronLeft}  handleclick={handlePreviousPage} disable={currentPage == 1} />
                     
                         {page.map((page, index) =>(
                             <NumberPage key={page} numberpage={page} changePage={handleChangePage} currentPage={currentPage} />
                         ))}
-                        <Chevron icon={faChevronRight} handleclick={handleNextPage}  disable={currentPage == page.length} /> 
+                        {
+                            disableNextPage? 
+                            <Chevron icon={faChevronRight} handleclick={handleNextPage}  disable /> 
+                            : 
+                            <Chevron icon={faChevronRight} handleclick={handleNextPage}   /> 
+                        }
+                        
                     </div>
                 </footer>
             </main>

@@ -7,8 +7,10 @@ import { states } from "../data/states";
 import { department } from "../data/department";
 import { createEmployee } from '../Redux/reducer';
 import { useDispatch } from 'react-redux';
-import 'react-datepicker/dist/react-datepicker.css'
-import store from '../Redux/store';
+import 'react-datepicker/dist/react-datepicker.css';
+import {Modal} from "modal-library-op-tristan"
+
+
 //Reste à faire : 
     //Affichage de plusieurs pages
     //Classement dans ordre croissant par section 
@@ -18,10 +20,12 @@ import store from '../Redux/store';
 export default function HRnet() {
 
   const dispatch =useDispatch()
+  const [isModal, setIsModal]= useState(false)
   const [startDateSelected , setStartDateSelect] = useState()
   const [birthDateSelected, setBirthDaySelected]= useState()
 
   const handleSaveEmployee = ()=>{
+    setIsModal(true)
     const e = document.getElementById('department')
     const firstName = document.getElementById('first-name').value;
     const lastName = document.getElementById('last-name').value;
@@ -82,6 +86,9 @@ export default function HRnet() {
             </form>
         </section>
         <Button text="Save" handleClick={handleSaveEmployee}  />
+        {isModal?
+        <Modal message="Employé créé" isOpen={true} />: ""
+      }
       </main>
     </div>
   );

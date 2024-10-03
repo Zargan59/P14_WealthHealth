@@ -63,7 +63,6 @@ margin: 0;
   box-shadow: 6px 6px 3px #5b700c  ;
   cursor: pointer;
   min-width: 100px;
-  /* border: 2px solid green; */
 }
 main{
   background-color:#758f0f;
@@ -258,10 +257,22 @@ footer .changePage{
 }
 
 .alphabetique{
-  border: 2px solid red;
+  position: relative;
+}
+.alphabetique::after{
+  content: "▲";
+  position: absolute;
+  top: 0%;
+  left: 60%;
 }
 .anti-alphabetique{
-  border: 2px solid blue;
+  position: relative;
+}
+.anti-alphabetique::after{
+  content: "▼";
+  position: absolute;
+  top: 0%;
+  left: 60%;
 }
 
 .disable{
