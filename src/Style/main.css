@@ -207,8 +207,6 @@ footer .changePage{
   background-color: #5b700c;
 
 }
-.customHeaderDatePicker .monthC{
-}
 .customHeaderDatePicker h2{
   color: white;
   font-size: 18px;
@@ -225,13 +223,8 @@ footer .changePage{
 .calendarContent{
   display: flex;
   align-items: center;
-  /* position: fixed; */
 }
 
-/* .react-datepicker__header{
-  padding: 0;
-  border: none;
-} */
 
 .test{
   border: 2px solid red;
@@ -276,5 +269,65 @@ footer .changePage{
 }
 
 .disable{
+  display: none;
+}
+.backgroundModal{
+  position: absolute;
+  height: 81vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.75);
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 1;
+}
+
+.modal{
+  z-index: 99;
+  position: relative;
+  margin: auto;
+  padding: 20px 0;
+
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 5px;
+  width: 200px;
+  height: 50px ;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  color: black;
+}
+
+.closeContent{
+  position: absolute;
+  bottom: 60%;
+  left: 95%;
+  border-radius: 50%;
+  color: white;
+  background-color: black;
+
+  cursor: pointer;
+
+  height: 20px;
+  width: 20px;
+  padding: 10px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.message{
+  width: fit-content;
+  padding:0 20px;
+  font-size: 18px;
+}
+
+.hidde{
   display: none;
 }

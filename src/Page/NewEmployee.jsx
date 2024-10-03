@@ -11,11 +11,6 @@ import 'react-datepicker/dist/react-datepicker.css';
 import {Modal} from "modal-library-op-tristan"
 
 
-//Reste à faire : 
-    //Affichage de plusieurs pages
-    //Classement dans ordre croissant par section 
-    //Modale via bibliothèque externe
-
 
 export default function HRnet() {
 
@@ -25,7 +20,6 @@ export default function HRnet() {
   const [birthDateSelected, setBirthDaySelected]= useState()
 
   const handleSaveEmployee = ()=>{
-    setIsModal(true)
     const e = document.getElementById('department')
     const firstName = document.getElementById('first-name').value;
     const lastName = document.getElementById('last-name').value;
@@ -51,15 +45,18 @@ export default function HRnet() {
   // && lastName && birthDate && startDate && department && street && city && state && state && zipCode
   if(firstName ){
     dispatch(createEmployee(employee))
-  }
-  else{
-    console.log("Manque");
+    setIsModal(true)
+    console.log("",isModal);
+
   }
   }
 
   return (
     <div className="App">
       <Header origin="Home" />
+      {isModal?
+        <Modal message="Employé créé" isOpen={isModal} setIsOpen={setIsModal} />: ""
+      }
       <main className='newEmployeeContent'>
         <h2>Create Employee</h2>
         <section className="formSection">
@@ -86,9 +83,8 @@ export default function HRnet() {
             </form>
         </section>
         <Button text="Save" handleClick={handleSaveEmployee}  />
-        {isModal?
-        <Modal message="Employé créé" isOpen={true} />: ""
-      }
+      
+      
       </main>
     </div>
   );
