@@ -1,8 +1,9 @@
 import '../Style/main.css';
+import "../Style/modal.css"
 import Header from '../Component/Header';
 import InputFormEmployee from "../Component/FormInput"
 import Button from '../Component/button';
-import { useEffect, useState } from 'react';
+import {  useState } from 'react';
 import { states } from "../data/states";
 import { department } from "../data/department";
 import { createEmployee } from '../Redux/reducer';
@@ -21,6 +22,7 @@ export default function HRnet() {
 
   const handleSaveEmployee = ()=>{
     const e = document.getElementById('department')
+    
     const firstName = document.getElementById('first-name').value;
     const lastName = document.getElementById('last-name').value;
     const birthDate = document.getElementById("date-of-birth").value
@@ -42,11 +44,9 @@ export default function HRnet() {
       state,
       zipCode
   };
-  // && lastName && birthDate && startDate && department && street && city && state && state && zipCode
-  if(firstName ){
+  if(firstName && lastName && birthDate && startDate && department && street && city && state && state && zipCode ){
     dispatch(createEmployee(employee))
     setIsModal(true)
-    console.log("",isModal);
 
   }
   }
@@ -73,7 +73,7 @@ export default function HRnet() {
                     <legend>Address</legend>
                     <div className="formFlex">
                         <InputFormEmployee label="street" content="Street" type="text" />
-                        <InputFormEmployee label="city" content="City" type="city" />
+                        <InputFormEmployee label="city" content="City" type="text" />
                     </div>
                     <InputFormEmployee label="state" content="State" type="select" data={states} />
                     <InputFormEmployee label="zip-code" content="Zip Code" type="number" />

@@ -5,7 +5,7 @@ import { faChevronRight, faChevronLeft, faHome } from "@fortawesome/free-solid-s
 
 import "react-datepicker/dist/react-datepicker.css";
 
-export default function InputFormEmployee({label,content,type, data, date, value }) {
+export default function InputFormEmployee({label,content,type, data }) {
   const [startDate, setStartDate] = useState(null)
   const currentYear = new Date().getFullYear()
   const currentMonth = new Date().getMonth()
@@ -26,16 +26,12 @@ export default function InputFormEmployee({label,content,type, data, date, value
     "November",
     "December",
   ]
-  const [test, setTest] = useState()
 
   for(let i=1950; i <= currentYear; i++ ){
     years.push(i)
   }
   
 
-  const returnToCurrentMonth = ()=>{
-    setStartDate(new Date())
-  }
   
   const CustomHeader = ({
     date,
@@ -103,9 +99,6 @@ export default function InputFormEmployee({label,content,type, data, date, value
         <div className="formContent">
           <label htmlFor={label}>{content}</label>
           <DatePicker fixedHeight id={label}  onChange={(date)=> setStartDate(date)} selected={startDate} renderCustomHeader={(props) => <CustomHeader {...props} />}/>
-
-
-          {/* <DatePicker id={label}  onChange={(selectDate) => date(selectDate.toLocaleDateString("fr"))} value={value} showYearDropdown scrollableYearDropdown  /> */}
         </div>
       )
     }

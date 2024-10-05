@@ -1,7 +1,6 @@
-import { useState } from "react"
 
 
-export default function ShowEntries({entries, setEntries}){
+export default function ShowEntries({ setEntries}){
 
     const handleChangeEntries = (e) =>{
         //Affiche le nombre d'entrée maximum à afficher

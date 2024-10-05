@@ -1,7 +1,5 @@
-import { useState } from "react";
 
 export default function MainLineTab({content, id ,handleSort, currentIDSort, sort }){
-
 
 if(id == currentIDSort){
     return(

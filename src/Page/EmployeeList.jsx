@@ -24,17 +24,14 @@ export default function EmployeeList(){
     const [sort, setSort] = useState(true)
     const [currentIDSort, setCurrentIDSort] = useState("firstName")
     
-    const [employeeslist, setEmployeeList]= useState()
     const [displayEmployees, setDisplayEmployees]=useState([])
 
-    const [currentPage, setCurrentPage] = useState("1")
+    const [currentPage, setCurrentPage] = useState(1)
     const [page, setPage] = useState([])
 
-    //Le nombre de page à définir en fonction du contenu
 
     useEffect(()=>{
         setTotalEntries(Employee.length)
-
         if(Employee.length){
             setError(false)
             sortEmployee(Employee)
@@ -42,7 +39,7 @@ export default function EmployeeList(){
         else{
             setError(true)
         }
-    },[sort,entries,currentPage ])
+    },[sort,entries,currentPage,currentIDSort ])
 
     //Quand j'affiche quelque chose de différent, je fais le trie
     useEffect(()=>{
@@ -53,7 +50,7 @@ export default function EmployeeList(){
             setDisablePreviousPage(true)
             
         }
-    },[currentPage])
+    },[currentPage, entries])
 
 
     //Quand je fais une recherche
@@ -63,12 +60,12 @@ export default function EmployeeList(){
         }
     },[employeeFiltered,sort,entries,currentPage])
 
-
+    //Tri du tableau
     const handleClickSort = (e)=>{
         const sortColumn = e.target.id
         if(sortColumn){
             setCurrentIDSort(sortColumn)
-            if(sortColumn == currentIDSort){
+            if(sortColumn === currentIDSort){
                 setSort(!sort)
             }
             else{
@@ -76,7 +73,8 @@ export default function EmployeeList(){
             }
         }
     }
-
+    
+    //Recherche
     const handleSearchChange = (e)=> {
         const search = e.target.value.toLowerCase()
         setIsSearching(search)
@@ -92,7 +90,7 @@ export default function EmployeeList(){
             })
             tab.forEach(element => {
                 test.find(e =>{
-                    if(e==element){
+                    if(e===element){
                         tabTest.add(employee)
                     }
                 })
@@ -101,7 +99,7 @@ export default function EmployeeList(){
         setEmployeeFiltered(Array.from(tabTest))
     }
 
-
+    //Afficher les employés
     const sortEmployee = (tab) =>{
         definePageNumber(tab)
         //Fonction qui reconnait le premier employée de chaque page une fois le tableau trier. 
@@ -119,7 +117,6 @@ export default function EmployeeList(){
                 setDisplayEmployees(employeeSorted.slice(defineFirstEmployeeOfPage, defineFirstEmployeeOfPage+entries))
         }
         else{
-
             const employeeSorted = [...tab].sort((a, b) => {
                 if (typeof a[currentIDSort] === "string") {
                   return b[currentIDSort].localeCompare(a[currentIDSort]);
@@ -134,7 +131,7 @@ export default function EmployeeList(){
     }
 
     const handleChangePage=(e)=>{
-        setCurrentPage(e.target.value)
+        setCurrentPage(Number(e.target.value))
     }
     const handleNextPage = ()=>{
         setCurrentPage(Number(currentPage)+1)
@@ -144,11 +141,12 @@ export default function EmployeeList(){
 
     }
 
+    //Affiche le nombre total de pages
     const definePageNumber = (tab) =>{
         let numberPages = []
         const pages = Math.ceil(tab.length/entries) 
-        console.log(tab);
-        if(pages > 1 ){
+        //Si j'ai + de 2pages
+        if(pages > 2 ){
             if(Number(currentPage)+2 > pages){
                 for(let i=Number(currentPage)-2; i< pages; i++){
                     numberPages.push(i)
@@ -162,12 +160,16 @@ export default function EmployeeList(){
             setPage(numberPages)
             setDisableNextPage(false)
         }
-        else{
+        else if(pages === 1){
             setPage([0])
+            setDisablePreviousPage(false)
+        }
+        else{
+            setPage([0,1])
             setDisablePreviousPage(false)
 
         }
-        if(currentPage==pages){
+        if(currentPage===pages){
             setDisableNextPage(true)
         }
         else{
@@ -176,16 +178,13 @@ export default function EmployeeList(){
     }
      
 
-
-
-
     return(
         <div>
             <Header/>
             <main>
                 <h2>Current Employees</h2>
                 <div className="headerEmployeeList">
-                    <ShowEntries entries={entries} setEntries={setEntries}/>
+                    <ShowEntries setEntries={setEntries}/>
                     <Search handleChange={handleSearchChange} />
                 </div>
                 <div className="tabContent">
